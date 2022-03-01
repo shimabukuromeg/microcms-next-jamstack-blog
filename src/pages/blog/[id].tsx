@@ -17,8 +17,13 @@ const Blog: NextPage<{
       <h1>{blog.title}</h1>
       <p>{blog.publishedAt}</p>
 
-      <Text span size={12} css={{ border: '1px solid', p: 8, borderRadius: 4 }}>{blog.category && `${blog.category.name}`}</Text>
-
+      {blog.category && (
+        <Text
+          span
+          size={12}
+          css={{ border: '1px solid', p: 8, borderRadius: 4 }}
+        >{`${blog.category.name}`}</Text>
+      )}
 
       <div
         dangerouslySetInnerHTML={{
