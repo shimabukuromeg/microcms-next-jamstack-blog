@@ -1,15 +1,25 @@
 import type { NextPage } from 'next';
-import { Container, Button } from '@nextui-org/react';
+import { Container, Button, Text } from '@nextui-org/react';
 import { client } from '../../libs/client';
 import Link from 'next/link';
 
 const Blog: NextPage<{
-  blog: { id: string; title: string; publishedAt: string; body: string };
+  blog: {
+    id: string;
+    title: string;
+    publishedAt: string;
+    body: string;
+    category: { name: string };
+  };
 }> = ({ blog }) => {
   return (
     <Container css={{ p: 30 }}>
       <h1>{blog.title}</h1>
       <p>{blog.publishedAt}</p>
+
+      <Text span size={12} css={{ border: '1px solid', p: 8, borderRadius: 4 }}>{blog.category && `${blog.category.name}`}</Text>
+
+
       <div
         dangerouslySetInnerHTML={{
           __html: `${blog.body}`,
