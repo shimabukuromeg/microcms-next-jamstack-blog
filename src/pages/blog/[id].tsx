@@ -1,43 +1,53 @@
 import type { NextPage } from 'next';
 import { Container, Button, Text } from '@nextui-org/react';
 import { client } from '../../libs/client';
+import { createOgImage } from '../../libs/createOgImage';
 import Link from 'next/link';
+import { HeadTemplate } from '../../components/HeadTemplate';
+import type { Blog } from '../index';
 
 const Blog: NextPage<{
-  blog: {
-    id: string;
-    title: string;
-    publishedAt: string;
-    body: string;
-    category: { name: string };
-  };
+  blog: Blog;
 }> = ({ blog }) => {
+  const { ogImageUrl } = createOgImage(
+    blog?.image?.url,
+    blog?.author,
+    blog.title
+  );
   return (
-    <Container css={{ p: 30 }}>
-      <h1>{blog.title}</h1>
-      <p>{blog.publishedAt}</p>
-
-      {blog.category && (
-        <Text
-          span
-          size={12}
-          css={{ border: '1px solid', p: 8, borderRadius: 4 }}
-        >{`${blog.category.name}`}</Text>
-      )}
-
-      <div
-        dangerouslySetInnerHTML={{
-          __html: `${blog.body}`,
-        }}
+    <>
+      <HeadTemplate
+        pagetitle={blog.title}
+        pagedescription={blog.title}
+        pagepath="blogs"
+        postimg={ogImageUrl}
       />
-      <Link href="/">
-        <a>
-          <Button bordered color="gradient" auto>
-            記事一覧に戻る
-          </Button>
-        </a>
-      </Link>
-    </Container>
+      <Container css={{ p: 30 }}>
+        <h1>{blog.title}</h1>
+        <p>{blog.publishedAt}</p>
+
+        {blog.category && (
+          <Text
+            span
+            size={12}
+            css={{ border: '1px solid', p: 8, borderRadius: 4 }}
+          >{`${blog.category.name}`}</Text>
+        )}
+
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `${blog.body}`,
+          }}
+        />
+        <Link href="/">
+          <a>
+            <Button bordered color="gradient" auto>
+              記事一覧に戻る
+            </Button>
+          </a>
+        </Link>
+      </Container>
+    </>
   );
 };
 
