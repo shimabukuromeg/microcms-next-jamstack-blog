@@ -2,13 +2,40 @@ import type { NextPage } from 'next';
 import { Container, Text, Card } from '@nextui-org/react';
 import Link from 'next/link';
 import { client } from '../libs/client';
+import { CustomImage } from '../components/CustomImage';
+import { Fragment } from 'react';
 
-const Home: NextPage<{ blogs: { id: string; title: string }[] }> = ({
-  blogs,
-}) => {
+export type Blog = {
+  id: string;
+  title: string;
+  body: string;
+  category: {
+    name: string;
+  };
+  author: {
+    id: string;
+    name: string;
+    image: {
+      url: string;
+    };
+  };
+  image: {
+    url: string;
+  };
+  publishedAt: string;
+};
+
+const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
   return (
-    <Container css={{ p: 30 }}>
-      <Container css={{ p: 16 }} display="flex" direction="row">
+    <Container
+      css={{
+        p: 30,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <Container css={{ p: 16, mb: 50 }} display="flex" direction="row">
         <Text
           h1
           size={60}
@@ -36,7 +63,16 @@ const Home: NextPage<{ blogs: { id: string; title: string }[] }> = ({
       {blogs.map((blog) => (
         <Link href={`/blog/${blog.id}`}>
           <a>
-            <Card color="gradient" css={{ mb: 20 }}>
+            <Card color="gradient" css={{ mb: 20, p: 20, maxW: 590 }}>
+              <Fragment key={blog.author.id}>
+                <CustomImage
+                  baseImageUrl={blog.image.url}
+                  width={600}
+                  height={315}
+                  title={blog?.title}
+                  author={blog.author}
+                />
+              </Fragment>
               <Text
                 css={{ fontWeight: '$bold', color: '$white' }}
                 transform="capitalize"
