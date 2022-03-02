@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Container, Text, Card } from '@nextui-org/react';
+import { Container, Text, Card, Row, Col, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { client } from '../libs/client';
 import { CustomImage } from '../components/CustomImage';
@@ -63,7 +63,7 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
       {blogs.map((blog) => (
         <Link href={`/blog/${blog.id}`}>
           <a>
-            <Card color="gradient" css={{ mb: 20, p: 20, maxW: 590 }}>
+            <Card color="gradient" css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}>
               <Fragment key={blog.author.id}>
                 <CustomImage
                   baseImageUrl={blog.image.url}
@@ -73,12 +73,40 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
                   author={blog.author}
                 />
               </Fragment>
-              <Text
-                css={{ fontWeight: '$bold', color: '$white' }}
-                transform="capitalize"
+              <Card.Footer
+                blur
+                css={{
+                  position: 'absolute',
+                  bgBlur: '#ffffff',
+                  borderTop:
+                    '$borderWeights$light solid rgba(255, 255, 255, 0.2)',
+                  bottom: 0,
+                  left: 0,
+                  zIndex: 1,
+                }}
               >
-                {blog.title}
-              </Text>
+                <Row>
+                  <Col>
+                    <Text color="#000" size={12}>
+                    {blog.title}
+                    </Text>
+                  </Col>
+                  <Col>
+                    <Row justify="flex-end">
+                      <Button flat auto rounded color="gradient">
+                        <Text
+                          css={{ color: 'inherit' }}
+                          size={12}
+                          weight="bold"
+                          transform="uppercase"
+                        >
+                          詳細
+                        </Text>
+                      </Button>
+                    </Row>
+                  </Col>
+                </Row>
+              </Card.Footer>
             </Card>
           </a>
         </Link>
