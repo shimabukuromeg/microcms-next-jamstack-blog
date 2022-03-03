@@ -70,10 +70,10 @@ export const getStaticPaths = async () => {
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async (context: any) => {
   const slug = context.params?.slug;
-  const draftKey = context.previewData?.draftKey;
-  const queries = draftKey !== undefined ? { draftKey: draftKey } : {};
+  // const draftKey = context.previewData?.draftKey;
+  // const queries = draftKey !== undefined ? { draftKey: draftKey } : {};
 
-  const data = await client.get({ endpoint: 'blog', contentId: slug, queries });
+  const data = await client.get({ endpoint: 'blog', contentId: slug });
 
   return {
     props: {
