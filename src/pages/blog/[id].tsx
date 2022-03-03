@@ -71,7 +71,7 @@ export const getStaticProps = async (context: any) => {
     `https://shimabukuromeg.microcms.io/api/v1/blog/${id}${
       draftKey !== undefined ? `?draftKey=${draftKey}` : ''
     }`,
-    { headers: { 'X-MICROCMS-API-KEY': process.env.apiKey || '' } }
+    { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
   ).then((res) => res.json());
 
   return {
