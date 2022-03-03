@@ -60,23 +60,17 @@ export const getStaticPaths = async () => {
   const paths = data.contents.map(
     (content: { id: string }) => `/blog/${content.id}`
   );
-  return { paths, fallback: true };
+  return { paths, fallback: false };
 };
 
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async (context: any) => {
   const id = context.params.id;
-  const draftKey = context.previewData?.draftKey;
-  const content = await fetch(
-    `https://shimabukuromeg.microcms.io/api/v1/blog/${id}${
-      draftKey !== undefined ? `?draftKey=${draftKey}` : ''
-    }`,
-    { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
-  ).then((res) => res.json());
+  const data = await client.get({ endpoint: 'blog', contentId: id });
 
   return {
     props: {
-      blog: content,
+      blog: data,
     },
   };
 };
