@@ -63,7 +63,10 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
       {blogs.map((blog) => (
         <Link href={`/blog/${blog.id}`}>
           <a>
-            <Card color="gradient" css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}>
+            <Card
+              color="gradient"
+              css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}
+            >
               <Fragment key={blog.author.id}>
                 <CustomImage
                   baseImageUrl={blog.image.url}
@@ -88,7 +91,7 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
                 <Row>
                   <Col>
                     <Text color="#000" size={12}>
-                    {blog.title}
+                      {blog.title}
                     </Text>
                   </Col>
                   <Col>

@@ -5,6 +5,7 @@ import { createOgImage } from '../../libs/createOgImage';
 import Link from 'next/link';
 import { HeadTemplate } from '../../components/HeadTemplate';
 import type { Blog } from '../index';
+import ErrorPage from 'next/error'
 
 const Blog: NextPage<{
   blog: Blog;
@@ -14,6 +15,9 @@ const Blog: NextPage<{
     blog?.author,
     blog.title
   );
+  if (!blog) {
+    return <ErrorPage statusCode={404} />;
+  }
   return (
     <>
       <HeadTemplate
@@ -60,13 +64,16 @@ export const getStaticPaths = async () => {
   const paths = data.contents.map(
     (content: { id: string }) => `/blog/${content.id}`
   );
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
 // データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async (context: any) => {
-  const id = context.params.id;
-  const data = await client.get({ endpoint: 'blog', contentId: id });
+  const slug = context.params?.slug;
+  const draftKey = context.previewData?.draftKey;
+  const queries = draftKey !== undefined ? { draftKey: draftKey } : {};
+
+  const data = await client.get({ endpoint: 'blog', contentId: slug, queries });
 
   return {
     props: {
