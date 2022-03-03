@@ -1,11 +1,11 @@
 import fetch from 'node-fetch';
 
 export default async (req, res) => {
-  if (!req.query.slug) {
+  if (!req.query.id) {
     return res.status(404).end();
   }
   const content = await fetch(
-    `https://shimabukuromeg.microcms.io/api/v1/blog/${req.query.slug}?fields=id&draftKey=${req.query.draftKey}`,
+    `https://shimabukuromeg.microcms.io/api/v1/blog/${req.query.id}?fields=id&draftKey=${req.query.draftKey}`,
     { headers: { 'X-MICROCMS-API-KEY': process.env.apiKey || '' } }
   )
     .then((res) => res.json())
@@ -16,7 +16,7 @@ export default async (req, res) => {
   }
 
   res.setPreviewData({
-    slug: content.id,
+    id: content.id,
     draftKey: req.query.draftKey,
   });
   res.writeHead(307, { Location: `/blog/${content.id}` });
