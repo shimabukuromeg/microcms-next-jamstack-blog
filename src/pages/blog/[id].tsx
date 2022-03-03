@@ -67,13 +67,16 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async (context: any) => {
   const id = context.params.id;
   const draftKey = context.previewData?.draftKey;
-  const q = draftKey !== undefined ? { draftKey: draftKey } : {}
-
-  const data = await client.get({ endpoint: 'blog', contentId: id, queries: q });
+  const content = await fetch(
+    `https://shimabukuromeg.microcms.io/api/v1/blog/${id}${
+      draftKey !== undefined ? `?draftKey=${draftKey}` : ''
+    }`,
+    { headers: { 'X-MICROCMS-API-KEY': process.env.apiKey || '' } }
+  ).then((res) => res.json());
 
   return {
     props: {
-      blog: data,
+      blog: content,
     },
   };
 };
