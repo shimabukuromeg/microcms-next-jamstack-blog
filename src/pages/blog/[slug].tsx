@@ -5,10 +5,14 @@ import { createOgImage } from '../../libs/createOgImage';
 import Link from 'next/link';
 import { HeadTemplate } from '../../components/HeadTemplate';
 import type { Blog } from '../index';
+import ErrorPage from 'next/error'
 
 const Blog: NextPage<{
   blog: Blog;
 }> = ({ blog }) => {
+  if (!blog) {
+    return <ErrorPage statusCode={404} />;
+  }
   const { ogImageUrl } = createOgImage(
     blog?.image?.url,
     blog?.author,
@@ -60,17 +64,22 @@ export const getStaticPaths = async () => {
   const paths = data.contents.map(
     (content: { id: string }) => `/blog/${content.id}`
   );
-  return { paths, fallback: false };
+  return { paths, fallback: true };
 };
 
-// データをテンプレートに受け渡す部分の処理を記述します
 export const getStaticProps = async (context: any) => {
-  const id = context.params.id;
-  const data = await client.get({ endpoint: 'blog', contentId: id });
-
-  return {
-    props: {
-      blog: data,
-    },
-  };
-};
+  const slug = context.params?.slug;
+  const draftKey = context.previewData?.draftKey;
+  const blog = await fetch(
+   `https://shimabukuromeg.microcms.io/api/v1/blog/${slug}${
+    draftKey !== undefined ? `?draftKey=${draftKey}` : ''
+   }`,
+   { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
+  )
+   .then((res) => res.json());
+   return {
+     props: {
+      blog
+     }
+   };
+ };
