@@ -3,7 +3,6 @@ import { Container, Text, Card, Row, Col, Button } from '@nextui-org/react';
 import Link from 'next/link';
 import { client } from '../libs/client';
 import { CustomImage } from '../components/CustomImage';
-import { Fragment } from 'react';
 
 export type Blog = {
   id: string;
@@ -61,18 +60,19 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
       </Container>
 
       {blogs.map((blog) => (
-        <Link href={`/blog/${blog.id}`}>
+        <Link href={`/blog/${blog.id}`} key={blog.id}>
           <a>
-            <Card color="gradient" css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}>
-              <Fragment key={blog.author.id}>
-                <CustomImage
-                  baseImageUrl={blog.image.url}
-                  width={600}
-                  height={315}
-                  title={blog?.title}
-                  author={blog.author}
-                />
-              </Fragment>
+            <Card
+              color="gradient"
+              css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}
+            >
+              <CustomImage
+                baseImageUrl={blog.image.url}
+                width={600}
+                height={315}
+                title={blog?.title}
+                author={blog.author}
+              />
               <Card.Footer
                 blur
                 css={{
@@ -88,7 +88,7 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
                 <Row>
                   <Col>
                     <Text color="#000" size={12}>
-                    {blog.title}
+                      {blog.title}
                     </Text>
                   </Col>
                   <Col>
