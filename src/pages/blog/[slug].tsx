@@ -1,15 +1,16 @@
 import type { NextPage } from 'next';
-import { Container, Button, Text } from '@nextui-org/react';
+import { Container, Button, Text, Row, Card } from '@nextui-org/react';
 import { client } from '../../libs/client';
 import { createOgImage } from '../../libs/createOgImage';
 import Link from 'next/link';
 import { HeadTemplate } from '../../components/HeadTemplate';
 import type { Blog } from '../index';
-import ErrorPage from 'next/error'
+import ErrorPage from 'next/error';
 
 const Blog: NextPage<{
   blog: Blog;
-}> = ({ blog }) => {
+  preview: boolean;
+}> = ({ blog, preview }) => {
   if (!blog) {
     return <ErrorPage statusCode={404} />;
   }
@@ -26,6 +27,19 @@ const Blog: NextPage<{
         pagepath="blogs"
         postimg={ogImageUrl}
       />
+      {
+        preview && (
+          <Container>
+          <Card color="gradient">
+            <Row justify="center" align="center">
+              <Text h6 size={15} color="white" css={{ m: 0 }}>
+                下書きのプレビューです
+              </Text>
+            </Row>
+          </Card>
+        </Container>
+        )
+      }
       <Container css={{ p: 30 }}>
         <h1>{blog.title}</h1>
         <p>{blog.publishedAt}</p>
@@ -67,19 +81,19 @@ export const getStaticPaths = async () => {
   return { paths, fallback: true };
 };
 
-export const getStaticProps = async (context: any) => {
+export const getStaticProps = async (context: any) => {  
   const slug = context.params?.slug;
   const draftKey = context.previewData?.draftKey;
   const blog = await fetch(
-   `https://shimabukuromeg.microcms.io/api/v1/blog/${slug}${
-    draftKey !== undefined ? `?draftKey=${draftKey}` : ''
-   }`,
-   { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
-  )
-   .then((res) => res.json());
-   return {
-     props: {
-      blog
-     }
-   };
- };
+    `https://shimabukuromeg.microcms.io/api/v1/blog/${slug}${
+      draftKey !== undefined ? `?draftKey=${draftKey}` : ''
+    }`,
+    { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
+  ).then((res) => res.json());
+  return {
+    props: {
+      blog,
+      preview: context.preview ?? false,
+    },
+  };
+};

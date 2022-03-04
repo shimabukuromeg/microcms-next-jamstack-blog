@@ -8,7 +8,8 @@ export default async (req, res) => {
     `https://shimabukuromeg.microcms.io/api/v1/blog/${req.query.slug}?fields=id&draftKey=${req.query.draftKey}`,
     { headers: { 'X-MICROCMS-API-KEY': process.env.API_KEY || '' } }
   )
-  .then(res => res.json()).catch(() => null);
+    .then((res) => res.json())
+    .catch(() => null);
 
   if (!content) {
     return res.status(401).json({ message: 'Invalid slug' });
