@@ -64,7 +64,7 @@ const Home: NextPage<{ blogs: Blog[] }> = ({ blogs }) => {
           <a>
             <Card
               color="gradient"
-              css={{ mb: 20, p: '20px 20px 80px', maxW: 590 }}
+              css={{ mb: 20, p: '10px 5px 80px 5px', maxW: 590 }}
             >
               <CustomImage
                 baseImageUrl={blog.image.url}
