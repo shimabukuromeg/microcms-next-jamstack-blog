@@ -23,8 +23,8 @@ const Blog: NextPage<{
   return (
     <>
       <HeadTemplate
-        pagetitle={preview ? `[下書きのプレビューだよ] ${blog.title}` : blog.title}
-        pagedescription={preview ? `[下書きのプレビューだよ] ${blog.title}` : blog.title}
+        pagetitle={blog.title}
+        pagedescription={blog.title}
         pagepath="blogs"
         postimg={ogImageUrl}
       />
